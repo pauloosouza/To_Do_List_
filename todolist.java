@@ -15,7 +15,7 @@ public class ToDoList {
             System.out.print("Escolha uma opção: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consumir a quebra de linha após a leitura do número
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
