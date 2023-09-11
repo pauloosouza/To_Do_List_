@@ -2,16 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import javax.swing.border.EmptyBorder;
 
-public class ToDoListGUI extends JFrame {
+public class ImprovedToDoListGUI extends JFrame {
     private DefaultListModel<String> listModel;
     private JList<String> taskList;
     private JTextField taskField;
 
-    public ToDoListGUI() {
+    public ImprovedToDoListGUI() {
         setTitle("Lista de Tarefas");
-        setSize(300, 400);
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -21,13 +21,18 @@ public class ToDoListGUI extends JFrame {
         JButton addButton = new JButton("Adicionar Tarefa");
         JButton removeButton = new JButton("Remover Tarefa");
 
+        addButton.setIcon(new ImageIcon("add.png")); // Adicione um ícone ao botão
+        removeButton.setIcon(new ImageIcon("remove.png")); // Adicione um ícone ao botão
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String task = taskField.getText();
+                String task = taskField.getText().trim();
                 if (!task.isEmpty()) {
                     listModel.addElement(task);
                     taskField.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Digite uma tarefa válida.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -38,16 +43,24 @@ public class ToDoListGUI extends JFrame {
                 int selectedIndex = taskList.getSelectedIndex();
                 if (selectedIndex != -1) {
                     listModel.remove(selectedIndex);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecione uma tarefa para remover.", "Aviso", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 2, 10, 0));
+        buttonPanel.add(addButton);
+        buttonPanel.add(removeButton);
+
         panel.add(taskField, BorderLayout.NORTH);
-        panel.add(taskList, BorderLayout.CENTER);
-        panel.add(addButton, BorderLayout.WEST);
-        panel.add(removeButton, BorderLayout.EAST);
+        panel.add(new JScrollPane(taskList), BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(panel);
     }
@@ -56,7 +69,7 @@ public class ToDoListGUI extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ToDoListGUI todoApp = new ToDoListGUI();
+                ImprovedToDoListGUI todoApp = new ImprovedToDoListGUI();
                 todoApp.setVisible(true);
             }
         });
